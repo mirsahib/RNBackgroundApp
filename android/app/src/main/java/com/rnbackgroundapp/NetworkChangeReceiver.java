@@ -80,34 +80,4 @@ public class NetworkChangeReceiver extends BroadcastReceiver {
         }
         return false;
     }
-
-    public static boolean isNetworkAvailable(Context context) {
-        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            Network networkCapabilities = cm.getActiveNetwork();
-
-            if (networkCapabilities == null) {
-                return false;
-            }
-
-            NetworkCapabilities actNw = cm.getNetworkCapabilities(networkCapabilities);
-
-            if (actNw == null) {
-                return false;
-            }
-
-            if (actNw.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)
-                    || actNw.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)
-                    || actNw.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET)) {
-                return true;
-            }
-
-            return false;
-        }
-
-        // deprecated in API level 29
-        NetworkInfo netInfo = cm.getActiveNetworkInfo();
-        return (netInfo != null && netInfo.isConnected());
-    }
 }
