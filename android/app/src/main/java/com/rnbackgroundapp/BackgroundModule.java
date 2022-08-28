@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.content.BroadcastReceiver;
 import android.content.IntentFilter;
 import android.net.ConnectivityManager;
+import 	android.net.wifi.WifiManager;
 
 public class BackgroundModule extends ReactContextBaseJavaModule {
     private Context mContext;
@@ -36,7 +37,7 @@ public class BackgroundModule extends ReactContextBaseJavaModule {
         // this.mContext.startService(service);
         BroadcastReceiver br = new NetworkChangeReceiver();
         IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
-        filter.addAction(Intent.ACTION_AIRPLANE_MODE_CHANGED);
+        filter.addAction(WifiManager.SUPPLICANT_CONNECTION_CHANGE_ACTION);
         this.mContext.registerReceiver(br, filter);
     }
 }

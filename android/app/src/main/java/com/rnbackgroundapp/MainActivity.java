@@ -46,12 +46,12 @@ public class MainActivity extends ReactActivity {
   public void onStop() {
     super.onStop();
     // Log.d("TAG", "onstop() called");
-    Intent service = new Intent(getApplicationContext(), HeadlessAction.class);
-    Bundle bundle = new Bundle();
-    bundle.putString("foo", "bar");
-    service.putExtras(bundle);
-    getApplicationContext().startService(service);
-    Log.d("TAG", "onstop() end");
+    // Intent service = new Intent(getApplicationContext(), HeadlessAction.class);
+    // Bundle bundle = new Bundle();
+    // bundle.putString("foo", "bar");
+    // service.putExtras(bundle);
+    // getApplicationContext().startService(service);
+    // Log.d("TAG", "onstop() end");
   }
 
   /**

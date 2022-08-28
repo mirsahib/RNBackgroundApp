@@ -1,4 +1,5 @@
 package com.rnbackgroundapp;
+
 import android.content.Intent;
 import android.os.Bundle;
 import com.facebook.react.HeadlessJsTaskService;
