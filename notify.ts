@@ -4,6 +4,8 @@ import { PermissionsAndroid, ToastAndroid } from 'react-native';
 
 const handleNotify = async () => {
     try {
+        console.log('notification running');
+
         ToastAndroid.show('Notify', ToastAndroid.SHORT)
         // Request permissions (required for iOS)
         await notifee.requestPermission()

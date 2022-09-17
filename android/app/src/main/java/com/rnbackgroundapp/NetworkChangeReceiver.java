@@ -15,6 +15,8 @@ import 	android.net.wifi.WifiManager;
 import com.facebook.react.HeadlessJsTaskService;
 import androidx.work.OneTimeWorkRequest;
 import androidx.work.WorkManager;
+import com.rnbackgroundapp.NetworkStateManager;
+import androidx.lifecycle.Observer;
 
 public class NetworkChangeReceiver extends BroadcastReceiver {
 
@@ -27,8 +29,10 @@ public class NetworkChangeReceiver extends BroadcastReceiver {
          * e.g. Connected -> Not Connected
          **/
         Log.d("TAG", "onReceive");
-        boolean hasInternet = isNetworkAvailable(context);
-        Log.d("TAG", "From br Wifi status "+hasInternet);
+        // boolean hasInternet = isNetworkAvailable(context);
+        // Log.d("TAG", "From br Wifi status "+hasInternet);
+        NetworkStateManager.getInstance().getNetworkConnectivityStatus()
+               .observeForever(activeNetworkStateObserver);
         //if (!isAppOnForeground((context))) {
             /**
              * We will start our service and send extra info about
@@ -81,6 +85,19 @@ public class NetworkChangeReceiver extends BroadcastReceiver {
         }
         return false;
     }
+
+    private final Observer<Boolean> activeNetworkStateObserver = new Observer<Boolean>() {
+        @Override
+        public void onChanged(Boolean isConnected) {
+            Log.d("TAG", "Wifi Status "+isConnected);
+            if(!isConnected){
+                request = new OneTimeWorkRequest.Builder(BackgroundWorker.class).build();
+                WorkManager.getInstance().enqueue(request);
+            }
+        }
+    };
+
+
     public static boolean isNetworkAvailable(Context context) {
         ConnectivityManager cm = (ConnectivityManager)
                 context.getSystemService(Context.CONNECTIVITY_SERVICE);

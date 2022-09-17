@@ -20,7 +20,7 @@ public class BackgroundWorker extends Worker {
     public Result doWork() {
 
         // Do the work here--in this case, upload the images.
-        Log.d("TAG", "working...");
+        Log.d("TAG", "Background working...");
 
         Intent service = new Intent(this.mContext.getApplicationContext(), HeadlessAction.class);
         Bundle bundle = new Bundle();
@@ -30,7 +30,7 @@ public class BackgroundWorker extends Worker {
 
         this.mContext.getApplicationContext().startService(service);
         
-        Log.d("TAG", "service code completed");
+        Log.d("TAG", "Background code completed");
 
         // Indicate whether the work finished successfully with the Result
         return Result.success();
