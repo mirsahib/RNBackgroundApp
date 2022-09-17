@@ -27,38 +27,39 @@ public class NetworkChangeReceiver extends BroadcastReceiver {
          * e.g. Connected -> Not Connected
          **/
         Log.d("TAG", "onReceive");
-        if (!isAppOnForeground((context))) {
+        boolean hasInternet = isNetworkAvailable(context);
+        Log.d("TAG", "From br Wifi status "+hasInternet);
+        //if (!isAppOnForeground((context))) {
             /**
              * We will start our service and send extra info about
              * network connections
              **/
-            //boolean hasInternet = isNetworkAvailable(context);
             //Log.d("TAG", "not foreground " + hasInternet);
             
-            final String action = intent.getAction();
-            //Log.d("TAG", " wifi action" + action);
-            if (action.equals(WifiManager.SUPPLICANT_CONNECTION_CHANGE_ACTION)) {
-                if (intent.getBooleanExtra(WifiManager.EXTRA_SUPPLICANT_CONNECTED, false)) {
-                    // do stuff
-                    Log.d("TAG", "wifi connected");
-                } else {
-                    // wifi connection was lost
-                    Log.d("TAG", "connection lost");
-                    request = new OneTimeWorkRequest.Builder(BackgroundWorker.class).build();
-                    WorkManager.getInstance().enqueue(request);
-                    // Intent serviceIntent = new Intent(context, HeadlessAction.class);
-                    // // serviceIntent.putExtra("hasInternet", hasInternet);
-                    // context.startService(serviceIntent);
-                    // HeadlessJsTaskService.acquireWakeLockNow(context);
+            // final String action = intent.getAction();
+            // //Log.d("TAG", " wifi action" + action);
+            // if (action.equals(WifiManager.SUPPLICANT_CONNECTION_CHANGE_ACTION)) {
+            //     if (intent.getBooleanExtra(WifiManager.EXTRA_SUPPLICANT_CONNECTED, false)) {
+            //         // do stuff
+            //         Log.d("TAG", "wifi connected");
+            //     } else {
+            //         // wifi connection was lost
+            //         Log.d("TAG", "connection lost");
+            //         request = new OneTimeWorkRequest.Builder(BackgroundWorker.class).build();
+            //         WorkManager.getInstance().enqueue(request);
+            //         // Intent serviceIntent = new Intent(context, HeadlessAction.class);
+            //         // // serviceIntent.putExtra("hasInternet", hasInternet);
+            //         // context.startService(serviceIntent);
+            //         // HeadlessJsTaskService.acquireWakeLockNow(context);
 
-                }
-            }
+            //     }
+            // }
 
 
             
-        } else {
-            Log.d("TAG", "foreground");
-        }
+        // } else {
+        //     Log.d("TAG", "foreground");
+        // }
     }
 
     private boolean isAppOnForeground(Context context) {
@@ -79,5 +80,33 @@ public class NetworkChangeReceiver extends BroadcastReceiver {
             }
         }
         return false;
+    }
+    public static boolean isNetworkAvailable(Context context) {
+        ConnectivityManager cm = (ConnectivityManager)
+                context.getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            Network networkCapabilities = cm.getActiveNetwork();
+
+            if(networkCapabilities == null) {
+                return false;
+            }
+
+            NetworkCapabilities actNw = cm.getNetworkCapabilities(networkCapabilities);
+
+            if(actNw == null) {
+                return false;
+            }
+
+            if(actNw.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) || actNw.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) || actNw.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET)) {
+                return true;
+            }
+
+            return false;
+        }
+
+        // deprecated in API level 29
+        NetworkInfo netInfo = cm.getActiveNetworkInfo();
+        return (netInfo != null && netInfo.isConnected());
     }
 }

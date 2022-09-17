@@ -67,7 +67,7 @@ const App = () => {
 
   return (
     <SafeAreaView >
-      <Button title='notify' onPress={()=>onDisplayNotification()}/>
+      {/* <Button title='notify' onPress={()=>onDisplayNotification()}/> */}
       <Button title='BGModule' onPress={()=>handleClick()}/>
     </SafeAreaView>
   );

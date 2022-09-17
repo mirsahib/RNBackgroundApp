@@ -9,10 +9,20 @@ import android.util.Log;
 import android.content.BroadcastReceiver;
 import android.content.IntentFilter;
 import android.net.ConnectivityManager;
+import com.rnbackgroundapp.NetworkStateManager;
+import androidx.lifecycle.Observer;
+import 	android.net.wifi.WifiManager;
+import androidx.work.WorkManager;
+import androidx.work.OneTimeWorkRequest;
+
+
 
 public class MainActivity extends ReactActivity {
 
   private BroadcastReceiver br;
+  private OneTimeWorkRequest request;
+
+  
   /**
    * Returns the name of the main component registered from JavaScript. This is
    * used to schedule
@@ -32,13 +42,27 @@ public class MainActivity extends ReactActivity {
     // this.br = new NetworkChangeReceiver();
   }
 
+  private final Observer<Boolean> activeNetworkStateObserver = new Observer<Boolean>() {
+        @Override
+        public void onChanged(Boolean isConnected) {
+            Log.d("TAG", "Wifi Status "+isConnected);
+        }
+    };
+
   @Override
   protected void onStart(){
     super.onStart();
-    // Log.d("TAG", "MainActivity on start called");
+    Log.d("TAG", "MainActivity on start called");
     // IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
     // filter.addAction(Intent.ACTION_AIRPLANE_MODE_CHANGED);
     // this.registerReceiver(this.br, filter);
+    //NetworkStateManager.getInstance().getNetworkConnectivityStatus()
+    //            .observe(this, activeNetworkStateObserver);
+    // br = new NetworkChangeReceiver();
+    // IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
+    // this.registerReceiver(br, filter);
+    request = new OneTimeWorkRequest.Builder(NetworkMonitorWorker.class).build();
+    WorkManager.getInstance().enqueue(request);
   }
   
 

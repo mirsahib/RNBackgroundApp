@@ -15,6 +15,8 @@ import java.util.List;
 
 public class MainApplication extends Application implements ReactApplication {
 
+  private NetworkMonitoringUtil mNetworkMonitoringUtil;
+
   private final ReactNativeHost mReactNativeHost =
       new ReactNativeHost(this) {
         @Override
@@ -56,6 +58,11 @@ public class MainApplication extends Application implements ReactApplication {
     ReactFeatureFlags.useTurboModules = BuildConfig.IS_NEW_ARCHITECTURE_ENABLED;
     SoLoader.init(this, /* native exopackage */ false);
     initializeFlipper(this, getReactNativeHost().getReactInstanceManager());
+
+
+    mNetworkMonitoringUtil = new NetworkMonitoringUtil(getApplicationContext());
+    mNetworkMonitoringUtil.checkNetworkState();
+    mNetworkMonitoringUtil.registerNetworkCallbackEvents();
   }
 
   /**
