@@ -22,5 +22,6 @@ notifee.onBackgroundEvent(async ({ type, detail }) => {
     }
   });
 
+//gitemoji test  
 AppRegistry.registerHeadlessTask('HeadlessAction',()=>headlessTask)
 AppRegistry.registerComponent(appName, () => App);
