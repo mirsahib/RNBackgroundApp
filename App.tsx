@@ -42,8 +42,11 @@ const App = () => {
 
     // Create a channel (required for Android)
     const channelId = await notifee.createChannel({
-      id: 'default',
+      id: 'sound',
       name: 'Default Channel',
+      vibration: true,
+      vibrationPattern: [300, 500],   
+      sound:'doorbell' 
     });
 
     // Display a notification
@@ -67,8 +70,8 @@ const App = () => {
 
   return (
     <SafeAreaView >
-      {/* <Button title='notify' onPress={()=>onDisplayNotification()}/> */}
-      <Button title='BGModule' onPress={()=>handleClick()}/>
+      <Button title='notify' onPress={()=>onDisplayNotification()}/>
+      {/* <Button title='BGModule' onPress={()=>handleClick()}/> */}
     </SafeAreaView>
   );
 };
